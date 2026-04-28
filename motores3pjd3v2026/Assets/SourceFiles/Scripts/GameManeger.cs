@@ -1,16 +1,46 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class GameManeger : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static GameManager Instancia;
+
+    public enum EstadoJogo
     {
-        
+        Iniciando,
+        MenuPrincipal,
+        Gameplay
     }
 
-    // Update is called once per frame
-    void Update()
+    public EstadoJogo estadoAtual;
+
+    private void Awake()
     {
-        
+        // Singleton
+        if (Instancia != null && Instancia != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instancia = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        DefinirEstado(EstadoJogo.Iniciando);
+    }
+
+    public void DefinirEstado(EstadoJogo novoEstado)
+    {
+        estadoAtual = novoEstado;
+        Debug.Log("Estado atual: " + estadoAtual);
+    }
+
+    // Controle de cenas
+    public void CarregarCena(string nomeCena)
+    {
+        SceneManager.LoadScene(nomeCena);
     }
 }
